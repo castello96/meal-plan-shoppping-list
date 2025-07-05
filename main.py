@@ -1,4 +1,6 @@
 from extract_links import LinkExtractor
+from scrape import Scraper
+import json
 
 """
 - Open the email.
@@ -138,4 +140,15 @@ In good health,
 Lisa xx"""
 
 meal_plan = LinkExtractor.extract_links(email_text)
-print(json.dumps(meal_plan, indent=2))
+
+for title, url in meal_plan["Breakfast"].items():
+    print(f"Title: {title}\n")
+    print(f"URL: {url}\n")
+    try:
+        recipe = Scraper.scrape(url)
+        print(f"Successfully scraped recipe!")
+        print(f"Ingredients: {recipe.ingredients}")
+        print(f"help.(recipe): {help(recipe)}")
+    except Exception as e:
+        print(f"Failed to scrape site {e.message}")
+        continue
